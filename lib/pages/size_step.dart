@@ -7,49 +7,58 @@ import 'package:mask_creator/widgets/previous_button.dart';
 import 'package:mask_creator/widgets/size_item.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class SizeStep extends StatelessWidget {
-  final String nextPage;
-  SizeStep(this.nextPage);
+class SizeSelection extends StatelessWidget {
+  final String routeName;
+  SizeSelection({@required this.routeName});
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<SizeStepModel>(
-      model: SizeStepModel(),
+    return ScopedModel<MaskSize>(
+      model: MaskSize(),
       child: Scaffold(
         appBar: AppBar(
           title: Text("Choose a size"),
         ),
-        body: ScopedModelDescendant<SizeStepModel>(
-            builder: (context, child, model) {
-          return Column(
-            children: <Widget>[
-              Expanded(
-                child: ListView.separated(
-                  separatorBuilder: (BuildContext context, int index) => ListDivider(),
-                  itemCount: model.maskSizes.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      child: SizeListItem(model.maskSizes[index]),
-                      onTap: () {
-                        model.setSelected(index);
-                      },
-                    );
-                  },
+        body: ScopedModelDescendant<MaskSize>(builder: (context, child, model) {
+          return SafeArea(
+            bottom: true,
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: ListView.separated(
+                    separatorBuilder: (context, index) => ListDivider(),
+                    itemCount: model.maskSizes.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        child: SizeListItem(item: model.maskSizes[index]),
+                        onTap: () {
+                          model.setSelected(index);
+                        },
+                      );
+                    },
+                  ),
                 ),
-              ),
-              Row(
-                children: <Widget>[
-                  PreviousButton('Cancel'),
-                  NextButton('Continue', model.selected != -1, () {
-                    var homeModel = ScopedModel.of<MasksModel>(context);
-                    homeModel.size = model.maskSizes[model.selected];
-                    Navigator.pushNamed(context, nextPage);
-                  }),
-                ],
-              ),
-            ],
+                _buildButtonBar(context, model)
+              ],
+            ),
           );
         }),
       ),
+    );
+  }
+
+  Widget _buildButtonBar(BuildContext context, MaskSize model) {
+    return Row(
+      children: <Widget>[
+        PreviousButton(text: 'Cancel'),
+        NextButton(
+            text: 'Continue',
+            enabled: model.selected != -1,
+            nextAction: () {
+              var homeModel = ScopedModel.of<Masks>(context);
+              homeModel.size = model.maskSizes[model.selected];
+              Navigator.pushNamed(context, routeName);
+            }),
+      ],
     );
   }
 }

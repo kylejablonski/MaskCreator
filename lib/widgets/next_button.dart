@@ -4,7 +4,8 @@ class NextButton extends StatelessWidget {
   final String text;
   final bool enabled;
   final Function nextAction;
-  NextButton(this.text, this.enabled, this.nextAction);
+  NextButton(
+      {@required this.text, @required this.enabled, @required this.nextAction});
   @override
   Widget build(BuildContext context) {
     return Expanded(

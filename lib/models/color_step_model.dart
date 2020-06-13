@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mask_creator/data/color_item.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class ColorStepModel extends Model {
+class MaskColor extends Model {
   List maskColors = List<ColorItem>();
   List strapColors = List<ColorItem>();
   int selectedMaskColor = -1;
@@ -115,31 +116,45 @@ class ColorStepModel extends Model {
     ),
   };
 
-  ColorStepModel() {
+  MaskColor() {
     _createMaskColors();
     _createStrapColors();
   }
 
   void _createMaskColors() {
-    _mask_colors
-        .forEach((k, v) => maskColors.add(ColorItem(k, v, _mask_icons[k])));
+    _mask_colors.forEach(
+      (k, v) => maskColors.add(
+        ColorItem(
+          name: k,
+          color: v,
+          image: _mask_icons[k],
+        ),
+      ),
+    );
   }
 
   void _createStrapColors() {
-    _strap_colors
-        .forEach((k, v) => strapColors.add(ColorItem(k, v, _strap_icons[k])));
+    _strap_colors.forEach(
+      (k, v) => strapColors.add(
+        ColorItem(
+          name: k,
+          color: v,
+          image: _strap_icons[k],
+        ),
+      ),
+    );
   }
 
   void setSelectedMaskColor(int maskColorIndex) {
     // unselect the selected
     if (selectedMaskColor != -1) {
-      maskColors[selectedMaskColor].isSelected = false;
+      maskColors[selectedMaskColor].setSelected(false);
     }
 
     if (maskColorIndex != selectedMaskColor) {
       // set the new selected
       selectedMaskColor = maskColorIndex;
-      maskColors[selectedMaskColor].isSelected = true;
+      maskColors[selectedMaskColor].setSelected(true);
     } else {
       selectedMaskColor = -1;
     }
@@ -150,29 +165,17 @@ class ColorStepModel extends Model {
   void setSelectedStrapColor(int strapColorIndex) {
     // unselect the selected
     if (selectedStrapColor != -1) {
-      strapColors[selectedStrapColor].isSelected = false;
+      strapColors[selectedStrapColor].setSelected(false);
     }
 
     if (strapColorIndex != selectedStrapColor) {
       // set the new selected
       selectedStrapColor = strapColorIndex;
-      strapColors[selectedStrapColor].isSelected = true;
+      strapColors[selectedStrapColor].setSelected(true);
     } else {
       selectedStrapColor = -1;
     }
 
     notifyListeners();
-  }
-}
-
-class ColorItem {
-  final String name;
-  final Color color;
-  final Widget image;
-  bool isSelected = false;
-  ColorItem(this.name, this.color, this.image);
-
-  setSelected(bool isSelected) {
-    this.isSelected = isSelected;
   }
 }

@@ -4,9 +4,9 @@ import 'package:mask_creator/models/material_step_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class ConfirmationDialog extends StatefulWidget {
-  final MaterialStepModel model;
-  final String nextPage;
-  ConfirmationDialog(this.model, this.nextPage);
+  final MaskMaterial model;
+  final String routeName;
+  ConfirmationDialog({@required this.model, @required this.routeName});
   @override
   State<StatefulWidget> createState() {
     return _ConfirmationDialog();
@@ -27,29 +27,7 @@ class _ConfirmationDialog extends State<ConfirmationDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      actions: <Widget>[
-        FlatButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(
-            'Cancel',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        FlatButton(
-          onPressed: () {
-            saveMask(context, widget.model);
-          },
-          child: Text(
-            'Create',
-            style: TextStyle(
-              color: Theme.of(context).accentColor,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        )
-      ],
+      actions: _buildAlertActions(context),
       title: Text(
         'Who is this mask for?',
         style: TextStyle(
@@ -70,14 +48,40 @@ class _ConfirmationDialog extends State<ConfirmationDialog> {
     );
   }
 
+  List<Widget> _buildAlertActions(BuildContext context) {
+    return <Widget>[
+      FlatButton(
+        onPressed: () => Navigator.pop(context),
+        child: Text(
+          'Cancel',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      FlatButton(
+        onPressed: () {
+          saveMask(context, widget.model);
+        },
+        child: Text(
+          'Create',
+          style: TextStyle(
+            color: Theme.of(context).accentColor,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      )
+    ];
+  }
+
   void saveMask(context, model) {
     // find the home model
-    var homeModel = ScopedModel.of<MasksModel>(context);
+    var homeModel = ScopedModel.of<Masks>(context);
     // set the material
     homeModel.material = model.materials[model.selected];
     // create the mask
     homeModel.createNewMask(nameController.text);
     // pop to the homepage
-    Navigator.popUntil(context, ModalRoute.withName(widget.nextPage));
+    Navigator.popUntil(context, ModalRoute.withName(widget.routeName));
   }
 }

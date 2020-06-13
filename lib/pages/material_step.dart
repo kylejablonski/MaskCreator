@@ -7,55 +7,65 @@ import 'package:mask_creator/widgets/next_button.dart';
 import 'package:mask_creator/widgets/previous_button.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class MaterialStep extends StatelessWidget {
-  final String nextPage;
-  MaterialStep(this.nextPage);
+class MaterialSelection extends StatelessWidget {
+  final String routeName;
+  MaterialSelection({@required this.routeName});
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<MaterialStepModel>(
-      model: MaterialStepModel(),
-      child: ScopedModelDescendant<MaterialStepModel>(
-          builder: (context, child, model) {
+    return ScopedModel<MaskMaterial>(
+      model: MaskMaterial(),
+      child:
+          ScopedModelDescendant<MaskMaterial>(builder: (context, child, model) {
         return Scaffold(
           appBar: AppBar(
             title: Text("Choose a material"),
           ),
-          body: Column(
-            children: <Widget>[
-              Expanded(
-                child: ListView.separated(
-                  separatorBuilder: (BuildContext context, int index) =>
-                      ListDivider(),
-                  itemCount: model.materials.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      child: MaterialListItem(model.materials[index]),
-                      onTap: () {
-                        // set the selected
-                        model.setSelected(index);
-                      },
-                    );
-                  },
-                ),
-              ),
-              Row(
-                children: <Widget>[
-                  PreviousButton('Back'),
-                  NextButton(
-                    "Continue",
-                    model.selected != -1,
-                    () {
-                      showDialog(
-                          context: context, child: ConfirmationDialog(model, nextPage));
+          body: SafeArea(
+            bottom: true,
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: ListView.separated(
+                    separatorBuilder: (context, index) => ListDivider(),
+                    itemCount: model.materials.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        child: MaterialListItem(item: model.materials[index]),
+                        onTap: () {
+                          // set the selected
+                          model.setSelected(index);
+                        },
+                      );
                     },
-                  )
-                ],
-              )
-            ],
+                  ),
+                ),
+                _buildButtonBar(context, model),
+              ],
+            ),
           ),
         );
       }),
+    );
+  }
+
+  Widget _buildButtonBar(BuildContext context, MaskMaterial model) {
+    return Row(
+      children: <Widget>[
+        PreviousButton(text: 'Back'),
+        NextButton(
+          text: "Continue",
+          enabled: model.selected != -1,
+          nextAction: () {
+            showDialog(
+                context: context,
+                child: ConfirmationDialog(
+                  model: model,
+                  routeName: routeName,
+                ));
+          },
+        )
+      ],
     );
   }
 }

@@ -7,56 +7,59 @@ import 'package:mask_creator/widgets/next_button.dart';
 import 'package:mask_creator/widgets/previous_button.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class ColorStep extends StatelessWidget {
-  final String nextPage;
-  ColorStep(this.nextPage);
+class ColorSelection extends StatelessWidget {
+  final String routeName;
+  ColorSelection({@required this.routeName});
 
   @override
   Widget build(BuildContext context) {
     // ColorStepModel
-    return ScopedModel<ColorStepModel>(
-      model: ColorStepModel(),
+    return ScopedModel<MaskColor>(
+      model: MaskColor(),
       // Children access the ColorStepModel
-      child: ScopedModelDescendant<ColorStepModel>(
-          builder: (context, child, model) {
+      child: ScopedModelDescendant<MaskColor>(builder: (context, child, model) {
         return Scaffold(
           appBar: AppBar(
             title: Text("Choose a color"),
           ),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              createMaskColorSection('Masks', model),
-              createStrapColorSection('Straps', model),
-              Spacer(),
-              Row(
-                children: <Widget>[
-                  PreviousButton('Back'),
-                  NextButton(
-                      'Continue',
-                      model.selectedMaskColor != -1 &&
-                          model.selectedStrapColor != -1, () {
-                    var homeModel = ScopedModel.of<MasksModel>(context);
-                    homeModel.mColor =
-                        model.maskColors[model.selectedMaskColor];
-                    homeModel.sColor =
-                        model.strapColors[model.selectedStrapColor];
-                    Navigator.pushNamed(context, nextPage);
-                  }),
-                ],
-              )
-            ],
+          body: SafeArea(
+            bottom: true,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                createMaskColorSection('Masks', model),
+                createStrapColorSection('Straps', model),
+                Spacer(),
+                Row(
+                  children: <Widget>[
+                    PreviousButton(text: 'Back'),
+                    NextButton(
+                        text: 'Continue',
+                        enabled: model.selectedMaskColor != -1 &&
+                            model.selectedStrapColor != -1,
+                        nextAction: () {
+                          var homeModel = ScopedModel.of<Masks>(context);
+                          homeModel.mColor =
+                              model.maskColors[model.selectedMaskColor];
+                          homeModel.sColor =
+                              model.strapColors[model.selectedStrapColor];
+                          Navigator.pushNamed(context, routeName);
+                        }),
+                  ],
+                )
+              ],
+            ),
           ),
         );
       }),
     );
   }
 
-  Widget createMaskColorSection(String title, ColorStepModel model) {
+  Widget createMaskColorSection(String title, MaskColor model) {
     return Column(
       children: <Widget>[
-        HeadingTitle(title),
+        HeadingTitle(text: title),
         GridView.count(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
           crossAxisSpacing: 22,
@@ -69,8 +72,8 @@ class ColorStep extends StatelessWidget {
               return InkWell(
                 child: Center(
                   child: ColorTile(
-                    model.maskColors[index].color,
-                    index == model.selectedMaskColor,
+                    color: model.maskColors[index].color,
+                    isSelected: index == model.selectedMaskColor,
                   ),
                 ),
                 onTap: () {
@@ -84,10 +87,10 @@ class ColorStep extends StatelessWidget {
     );
   }
 
-  Widget createStrapColorSection(String title, ColorStepModel model) {
+  Widget createStrapColorSection(String title, MaskColor model) {
     return Column(
       children: <Widget>[
-        HeadingTitle('Straps'),
+        HeadingTitle(text: 'Straps'),
         GridView.count(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
           crossAxisSpacing: 22,
@@ -100,8 +103,8 @@ class ColorStep extends StatelessWidget {
               return InkWell(
                 child: Center(
                   child: ColorTile(
-                    model.strapColors[index].color,
-                    index == model.selectedStrapColor,
+                    color: model.strapColors[index].color,
+                    isSelected: index == model.selectedStrapColor,
                   ),
                 ),
                 onTap: () {

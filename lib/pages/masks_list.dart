@@ -9,39 +9,36 @@ class MasksList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Mask Creator'),
-        ),
-        body:
-            ScopedModelDescendant<MasksModel>(builder: (context, child, model) {
-          if (model.masks.length == 0) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text('You have not created any masks'),
-                ],
-              ),
-            );
-          } else {
-            return ListView.separated(
-              separatorBuilder: (BuildContext context, int index) => ListDivider(),
-              itemCount: model.masks.length,
-              itemBuilder: (context, index) {
-                return MaskListItem(model.masks[index]);
-              },
-            );
-          }
-        }),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/size');
-          },
-          tooltip: 'Create a mask',
-          child: Icon(Icons.add),
-        ),
-      
+      appBar: AppBar(
+        title: Text('Mask Creator'),
+      ),
+      body: ScopedModelDescendant<Masks>(builder: (context, child, model) {
+        if (model.masks.length == 0) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text('You have not created any masks'),
+              ],
+            ),
+          );
+        } else {
+          return ListView.separated(
+            separatorBuilder: (context, index) => ListDivider(),
+            itemCount: model.masks.length,
+            itemBuilder: (context, index) {
+              return MaskListItem(item: model.masks[index]);
+            },
+          );
+        }
+      }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, '/size');
+        },
+        tooltip: 'Create a mask',
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
-

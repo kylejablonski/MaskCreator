@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mask_creator/models/material_step_model.dart';
+import 'package:mask_creator/data/material_item.dart';
 import 'package:mask_creator/widgets/circular_check.dart';
 
 class MaterialListItem extends StatefulWidget {
-  final MaterialItem materialItem;
-  MaterialListItem(this.materialItem);
+  final MaterialItem item;
+  MaterialListItem({@required this.item});
   @override
   State<StatefulWidget> createState() {
     return _MaterialListItemState();
@@ -22,7 +22,7 @@ class _MaterialListItemState extends State<MaterialListItem> {
               Padding(
                 padding: EdgeInsets.all(16),
                 child: Text(
-                  widget.materialItem.materialName,
+                  widget.item.name,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
@@ -30,7 +30,14 @@ class _MaterialListItemState extends State<MaterialListItem> {
                 ),
               ),
               Spacer(),
-              CircularCheck(widget.materialItem.isSelected, 8, 0, 4, 16, 4),
+              CircularCheck(
+                isSelected: widget.item.selected,
+                iconPadding: 8,
+                contPaddingLeft: 0,
+                contPaddingTop: 4,
+                contPaddingRight: 16,
+                contPaddingBottom: 4,
+              ),
             ],
           )
         ],

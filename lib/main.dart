@@ -13,20 +13,17 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   const MyApp({Key key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<MasksModel>(
-      model: MasksModel(),
+    return ScopedModel<Masks>(
+      model: Masks(),
       child: MaterialApp(
         title: 'Mask Creator',
         routes: {
-          // When navigating to the "/" route, build the FirstScreen widget.
           '/': (context) => MasksList(),
-          // When navigating to the "/second" route, build the SecondScreen widget.
-          '/size': (context) => SizeStep('/color'),
-          '/color': (context) => ColorStep('/material'),
-          '/material': (context) => MaterialStep('/'),
+          '/size': (context) => SizeSelection(routeName: '/color'),
+          '/color': (context) => ColorSelection(routeName: '/material'),
+          '/material': (context) => MaterialSelection(routeName: '/'),
         },
         theme: ThemeData(
           primarySwatch: Colors.grey,

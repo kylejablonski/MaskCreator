@@ -8,16 +8,25 @@ class CircularCheck extends StatelessWidget {
   final double contPaddingBottom;
   final double iconPadding;
 
-  CircularCheck(this.isSelected, this.iconPadding, this.contPaddingLeft,
-      this.contPaddingTop, this.contPaddingRight, this.contPaddingBottom);
+  CircularCheck(
+      {@required this.isSelected,
+      @required this.iconPadding,
+      @required this.contPaddingLeft,
+      @required this.contPaddingTop,
+      @required this.contPaddingRight,
+      @required this.contPaddingBottom});
 
   @override
   Widget build(BuildContext context) {
     return Visibility(
       visible: isSelected,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(contPaddingLeft, contPaddingTop,
-            contPaddingRight, contPaddingBottom),
+        padding: EdgeInsets.fromLTRB(
+          contPaddingLeft,
+          contPaddingTop,
+          contPaddingRight,
+          contPaddingBottom,
+        ),
         child: Container(
           child: Padding(
             padding: EdgeInsets.all(iconPadding),
@@ -29,7 +38,10 @@ class CircularCheck extends StatelessWidget {
           decoration: new BoxDecoration(
             color: Colors.white,
             shape: BoxShape.circle,
-            border: Border.all(width: 1.0, color: Colors.black),
+            border: Border.all(
+              width: 1.0,
+              color: Colors.black,
+            ),
           ),
         ),
       ),
