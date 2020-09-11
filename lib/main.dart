@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Baloo',
           primaryIconTheme: IconThemeData(),
           primaryTextTheme: TextTheme(
-            title: TextStyle(
+            headline6: TextStyle(
               fontWeight: FontWeight.w700,
             ),
           ),
