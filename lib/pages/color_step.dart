@@ -1,45 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:mask_creator/models/color_step_model.dart';
+import 'package:mask_creator/models/masks_model.dart';
 import 'package:mask_creator/widgets/color.dart';
 import 'package:mask_creator/widgets/heading_title.dart';
 import 'package:mask_creator/widgets/next_button.dart';
 import 'package:mask_creator/widgets/previous_button.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class ColorSelection extends StatelessWidget {
   final String routeName;
-  final MaskColor model;
-  ColorSelection({@required this.routeName, @required this.model});
+  ColorSelection({@required this.routeName});
 
   @override
   Widget build(BuildContext context) {
     // ColorStepModel
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Choose a color"),
-      ),
-      body: SafeArea(
-        bottom: true,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            createMaskColorSection('Masks', model),
-            createStrapColorSection('Straps', model),
-            Spacer(),
-            Row(
+    return ScopedModel<MaskColor>(
+      model: MaskColor(),
+      // Children access the ColorStepModel
+      child: ScopedModelDescendant<MaskColor>(builder: (context, child, model) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text("Choose a color"),
+          ),
+          body: SafeArea(
+            bottom: true,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                PreviousButton(text: 'Back'),
-                NextButton(
-                    text: 'Continue',
-                    enabled: true,
-                    nextAction: () {
-                      Navigator.pushNamed(context, routeName);
-                    }),
+                createMaskColorSection('Masks', model),
+                createStrapColorSection('Straps', model),
+                Spacer(),
+                Row(
+                  children: <Widget>[
+                    PreviousButton(text: 'Back'),
+                    NextButton(
+                        text: 'Continue',
+                        enabled: model.selectedMaskColor != -1 &&
+                            model.selectedStrapColor != -1,
+                        nextAction: () {
+                          var homeModel = ScopedModel.of<Masks>(context);
+                          homeModel.mColor =
+                              model.maskColors[model.selectedMaskColor];
+                          homeModel.sColor =
+                              model.strapColors[model.selectedStrapColor];
+                          Navigator.pushNamed(context, routeName);
+                        }),
+                  ],
+                )
               ],
-            )
-          ],
-        ),
-      ),
+            ),
+          ),
+        );
+      }),
     );
   }
 

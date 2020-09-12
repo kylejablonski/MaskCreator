@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mask_creator/data/color_item.dart';
+import 'package:scoped_model/scoped_model.dart';
 
-class MaskColor {
+class MaskColor extends Model {
   List maskColors = List<ColorItem>();
   List strapColors = List<ColorItem>();
   int selectedMaskColor = -1;
@@ -157,6 +158,8 @@ class MaskColor {
     } else {
       selectedMaskColor = -1;
     }
+
+    notifyListeners();
   }
 
   void setSelectedStrapColor(int strapColorIndex) {
@@ -172,5 +175,6 @@ class MaskColor {
     } else {
       selectedStrapColor = -1;
     }
+    notifyListeners();
   }
 }

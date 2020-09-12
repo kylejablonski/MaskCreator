@@ -7,36 +7,36 @@ import 'package:mask_creator/pages/color_step.dart';
 import 'package:mask_creator/pages/masks_list.dart';
 import 'package:mask_creator/pages/material_step.dart';
 import 'package:mask_creator/pages/size_step.dart';
-import 'models/masks_model.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'pages/masks_list.dart';
 
-void main() => runApp(MyApp(model: Masks()));
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  final Masks model;
-  const MyApp({Key key, @required this.model}) : super(key: key);
+  const MyApp({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Mask Creator',
-      routes: {
-        '/': (context) => MasksList(model: this.model),
-        '/size': (context) =>
-            SizeSelection(routeName: '/color', model: MaskSize()),
-        '/color': (context) =>
-            ColorSelection(routeName: '/material', model: MaskColor()),
-        '/material': (context) =>
-            MaterialSelection(routeName: '/', model: MaskMaterial()),
-      },
-      theme: ThemeData(
-        primarySwatch: Colors.grey,
-        accentColor: Colors.red,
-        fontFamily: 'Baloo',
-        primaryIconTheme: IconThemeData(),
-        primaryTextTheme: TextTheme(
-          headline6: TextStyle(
-            fontWeight: FontWeight.w700,
+    return ScopedModel<Masks>(
+      // 1
+      model: Masks(), // 2
+      child: MaterialApp(
+        title: 'Mask Creator',
+        routes: {
+          '/': (context) => MasksList(), // 3
+          '/size': (context) => SizeSelection(routeName: '/color'),
+          '/color': (context) => ColorSelection(routeName: '/material'),
+          '/material': (context) => MaterialSelection(routeName: '/'),
+        },
+        theme: ThemeData(
+          primarySwatch: Colors.grey,
+          accentColor: Colors.red,
+          fontFamily: 'Baloo',
+          primaryIconTheme: IconThemeData(),
+          primaryTextTheme: TextTheme(
+            headline6: TextStyle(
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
       ),

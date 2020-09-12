@@ -2,17 +2,14 @@ import 'package:mask_creator/data/color_item.dart';
 import 'package:mask_creator/data/mask_item.dart';
 import 'package:mask_creator/data/material_item.dart';
 import 'package:mask_creator/data/size_item.dart';
+import 'package:scoped_model/scoped_model.dart';
 
-class Masks {
-  List<MaskItem> _masks = List<MaskItem>();
+class Masks extends Model {
+  List<MaskItem> masks = List<MaskItem>();
   SizeItem maskSize;
   MaterialItem maskMaterial;
   ColorItem mColor;
   ColorItem sColor;
-
-  List<MaskItem> get masks {
-    return _masks;
-  }
 
   set size(SizeItem sizeItem) {
     this.maskSize = sizeItem;
@@ -38,5 +35,7 @@ class Masks {
         maskColor: this.mColor,
         strapColor: this.sColor,
         material: this.maskMaterial));
+
+    notifyListeners();
   }
 }

@@ -1,43 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:mask_creator/models/masks_model.dart';
 import 'package:mask_creator/models/size_step_model.dart';
 import 'package:mask_creator/widgets/list_divider.dart';
 import 'package:mask_creator/widgets/next_button.dart';
 import 'package:mask_creator/widgets/previous_button.dart';
 import 'package:mask_creator/widgets/size_item.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class SizeSelection extends StatelessWidget {
   final String routeName;
-  final MaskSize model;
-  SizeSelection({@required this.routeName, @required this.model});
+  SizeSelection({@required this.routeName});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScopedModel<MaskSize>(
+      model: MaskSize(),
+      child: Scaffold(
         appBar: AppBar(
           title: Text("Choose a size"),
         ),
-        body: SafeArea(
-          bottom: true,
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => ListDivider(),
-                  itemCount: model.maskSizes.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      child: SizeListItem(item: model.maskSizes[index]),
-                      onTap: () {
-                        model.setSelected(index);
-                      },
-                    );
-                  },
+        body: ScopedModelDescendant<MaskSize>(builder: (context, child, model) {
+          return SafeArea(
+            bottom: true,
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: ListView.separated(
+                    separatorBuilder: (context, index) => ListDivider(),
+                    itemCount: model.maskSizes.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        child: SizeListItem(item: model.maskSizes[index]),
+                        onTap: () {
+                          model.setSelected(index);
+                        },
+                      );
+                    },
+                  ),
                 ),
-              ),
-              _buildButtonBar(context, model)
-            ],
-          ),
-        ));
+                _buildButtonBar(context, model)
+              ],
+            ),
+          );
+        }),
+      ),
+    );
   }
 
   Widget _buildButtonBar(BuildContext context, MaskSize model) {
@@ -46,9 +53,11 @@ class SizeSelection extends StatelessWidget {
         PreviousButton(text: 'Cancel'),
         NextButton(
             text: 'Continue',
-            enabled: true,
+            enabled: model.selected != -1, // 1
             nextAction: () {
-              Navigator.pushNamed(context, routeName);
+              var homeModel = ScopedModel.of<Masks>(context); // 2
+              homeModel.size = model.maskSizes[model.selected]; // 3
+              Navigator.pushNamed(context, this.routeName);
             }),
       ],
     );
