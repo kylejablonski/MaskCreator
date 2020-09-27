@@ -10,18 +10,17 @@ import 'package:mask_creator/pages/size_step.dart';
 import 'models/masks_model.dart';
 import 'pages/masks_list.dart';
 
-void main() => runApp(MyApp(model: Masks()));
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  final Masks model;
-  const MyApp({Key key, @required this.model}) : super(key: key);
+  const MyApp({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Mask Creator',
       routes: {
-        '/': (context) => MasksList(model: this.model),
+        '/': (context) => MasksList(routeName: '/size', model: Masks()),
         '/size': (context) =>
             SizeSelection(routeName: '/color', model: MaskSize()),
         '/color': (context) =>

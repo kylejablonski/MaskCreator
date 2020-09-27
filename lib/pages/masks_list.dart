@@ -5,8 +5,9 @@ import 'package:mask_creator/widgets/mask_list_item.dart';
 import '../models/masks_model.dart';
 
 class MasksList extends StatelessWidget {
+  final String routeName;
   final Masks model;
-  MasksList({@required this.model});
+  MasksList({@required this.routeName, @required this.model});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,7 @@ class MasksList extends StatelessWidget {
       }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/size');
+          Navigator.pushNamed(context, routeName);
         },
         tooltip: 'Create a mask',
         child: Icon(Icons.add),
