@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mask_creator/models/color_step_model.dart';
 import 'package:mask_creator/models/masks_model.dart';
-import 'package:mask_creator/models/material_step_model.dart';
-import 'package:mask_creator/models/size_step_model.dart';
 import 'package:mask_creator/pages/color_step.dart';
 import 'package:mask_creator/pages/masks_list.dart';
 import 'package:mask_creator/pages/material_step.dart';
@@ -23,7 +20,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Mask Creator',
         routes: {
-          '/': (context) => MasksList(), // 3
+          '/': (context) => MasksList(routeName: '/size'), // 3
           '/size': (context) => SizeSelection(routeName: '/color'),
           '/color': (context) => ColorSelection(routeName: '/material'),
           '/material': (context) => MaterialSelection(routeName: '/'),
